@@ -88,6 +88,9 @@ def format(brand: NonemptyString, price: PositiveFloat):
 class Entity:
     @classmethod
     def __init_subclass__(cls):
+        for name, attr in cls.__dict__.items():
+            if callable(attr):
+                setattr(cls, name, checked(attr))
         for name, ann in cls.__annotations__.items():
             contract = ann()  # Integer()
             contract.__set_name__(cls, name)
@@ -100,22 +103,17 @@ class Player(Entity):
     x: Integer
     y: Integer
 
-    @checked
     def left(self, dx: PositiveInteger):
         self.x -= dx
 
-    @checked
     def right(self, dx: PositiveInteger):
         self.x += dx
 
-    @checked
     def down(self, dy: PositiveInteger):
         self.y -= dy
 
-    @checked
     def up(self, dy: PositiveInteger):
         self.y += dy
 
 
 p = Player("Mario", 3, 4)
-p.left(-1)
