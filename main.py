@@ -2,19 +2,19 @@ from dataclasses import dataclass
 from validation import Entity, checked
 
 
-@checked
-def gcd(a: PositiveInteger, b: PositiveInteger):
-    """Computes the greatest common divisor of a and b"""
-    if a > b:
-        return gcd(b, a)
-    while b != 0:
-        a, b = b, a % b
-    return a
+# @checked
+# def gcd(a: PositiveInteger, b: PositiveInteger):
+#     """Computes the greatest common divisor of a and b"""
+#     if a > b:
+#         return gcd(b, a)
+#     while b != 0:
+#         a, b = b, a % b
+#     return a
 
 
-@checked
-def format(brand: NonemptyString, price: PositiveFloat):
-    return f"{brand}: ${price:.2f}"
+# @checked
+# def format(brand: NonemptyString, price: PositiveFloat):
+#     return f"{brand}: ${price:.2f}"
 
 
 @dataclass

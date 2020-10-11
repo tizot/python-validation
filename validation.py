@@ -1,8 +1,16 @@
+from collections import ChainMap
 from functools import wraps
 from inspect import signature
 
 
+_contracts = {}
+
 class Contract:
+    @classmethod
+    def __init_subclass__(cls):
+        # register contract
+        _contracts[cls.__name__] = cls
+
     # called on "owner" creation
     def __set_name__(self, owner, name):
         self.name = name
@@ -74,7 +82,17 @@ def Reference(cls):
     return type(cls.__name__, (Typed, ), {"type": cls})
 
 
-class Entity:
+class EntityMeta(type):
+    @classmethod
+    def __prepare__(cls, *args):
+        return ChainMap({}, _contracts)
+
+    def __new__(cls, name, bases, methods):
+        methods = methods.maps[0]
+        return super().__new__(cls, name, bases, methods)
+
+
+class Entity(metaclass=EntityMeta):
     @classmethod
     def __init_subclass__(cls):
         for name, attr in cls.__dict__.items():
