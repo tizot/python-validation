@@ -85,6 +85,11 @@ def format(brand: NonemptyString, price: PositiveFloat):
     return f"{brand}: ${price:.2f}"
 
 
+def Reference(cls):
+    """Dynamically creates subclass of Typed to reference classes"""
+    return type(cls.__name__, (Typed, ), {"type": cls})
+
+
 class Entity:
     @classmethod
     def __init_subclass__(cls):
@@ -92,7 +97,10 @@ class Entity:
             if callable(attr):
                 setattr(cls, name, checked(attr))
         for name, ann in cls.__annotations__.items():
-            contract = ann()  # Integer()
+            if issubclass(ann, Contract):
+                contract = ann()  # Integer()
+            else:
+                contract = Reference(ann)()  # instantiate dynamic Reference(Game)
             contract.__set_name__(cls, name)
             setattr(cls, name, contract)
 
