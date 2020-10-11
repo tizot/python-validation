@@ -85,11 +85,20 @@ def format(brand: NonemptyString, price: PositiveFloat):
     return f"{brand}: ${price:.2f}"
 
 
+class Entity:
+    @classmethod
+    def __init_subclass__(cls):
+        for name, ann in cls.__annotations__.items():
+            contract = ann()  # Integer()
+            contract.__set_name__(cls, name)
+            setattr(cls, name, contract)
+
+
 @dataclass
-class Player:
-    name: str = NonemptyString()
-    x: int = Integer()
-    y: int = Integer()
+class Player(Entity):
+    name: NonemptyString
+    x: Integer
+    y: Integer
 
     def left(self, dx):
         self.x -= dx
