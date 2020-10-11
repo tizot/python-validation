@@ -64,6 +64,13 @@ class PositiveFloat(Float, Positive): ...
 class NonemptyString(String, Nonempty): ...
 
 
+def _get_contract_cls(ann):
+    if issubclass(ann, Contract):
+        return ann  # Integer
+    else:
+        return Reference(ann)  # dynamic Reference(SomeClass)
+
+
 def checked(func):
     sig = signature(func)
     ann = func.__annotations__
@@ -72,7 +79,7 @@ def checked(func):
         bound = sig.bind(*args, **kwargs)
         for name, val in bound.arguments.items():
             if name in ann:
-                ann[name].check(val)
+                _get_contract_cls(ann[name]).check(val)
         return func(*args, **kwargs)
     return wrapped
 
@@ -99,9 +106,6 @@ class Entity(metaclass=EntityMeta):
             if callable(attr):
                 setattr(cls, name, checked(attr))
         for name, ann in cls.__annotations__.items():
-            if issubclass(ann, Contract):
-                contract = ann()  # Integer()
-            else:
-                contract = Reference(ann)()  # instantiate dynamic Reference(Game)
+            contract = _get_contract_cls(ann)()
             contract.__set_name__(cls, name)
             setattr(cls, name, contract)
