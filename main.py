@@ -100,17 +100,22 @@ class Player(Entity):
     x: Integer
     y: Integer
 
-    def left(self, dx):
+    @checked
+    def left(self, dx: PositiveInteger):
         self.x -= dx
 
-    def right(self, dx):
+    @checked
+    def right(self, dx: PositiveInteger):
         self.x += dx
 
-    def down(self, dy):
+    @checked
+    def down(self, dy: PositiveInteger):
         self.y -= dy
 
-    def up(self, dy):
+    @checked
+    def up(self, dy: PositiveInteger):
         self.y += dy
 
 
 p = Player("Mario", 3, 4)
+p.left(-1)
