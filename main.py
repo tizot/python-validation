@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from functools import wraps
 from inspect import signature
 
@@ -84,15 +85,11 @@ def format(brand: NonemptyString, price: PositiveFloat):
     return f"{brand}: ${price:.2f}"
 
 
+@dataclass
 class Player:
-    name = NonemptyString()
-    x = Integer()
-    y = Integer()
-
-    def __init__(self, name: str, x: int, y: int):
-        self.name = name
-        self.x = x
-        self.y = y
+    name: str = NonemptyString()
+    x: int = Integer()
+    y: int = Integer()
 
     def left(self, dx):
         self.x -= dx
@@ -105,9 +102,6 @@ class Player:
 
     def up(self, dy):
         self.y += dy
-
-    def __repr__(self):
-        return f"Player(name={self.name}, x={self.x}, y={self.y})"
 
 
 p = Player("Mario", 3, 4)
