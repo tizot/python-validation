@@ -1,3 +1,7 @@
+from functools import wraps
+from inspect import signature
+
+
 class Contract:
     @classmethod
     def check(cls, val): ...
@@ -43,10 +47,22 @@ class PositiveFloat(Float, Positive): ...
 class NonemptyString(String, Nonempty): ...
 
 
-def gcd(a: int, b: int):
+def checked(func):
+    sig = signature(func)
+    ann = func.__annotations__
+    @wraps(func)
+    def wrapped(*args, **kwargs):
+        bound = sig.bind(*args, **kwargs)
+        for name, val in bound.arguments.items():
+            if name in ann:
+                ann[name].check(val)
+        return func(*args, **kwargs)
+    return wrapped
+
+
+@checked
+def gcd(a: PositiveInteger, b: PositiveInteger):
     """Computes the greatest common divisor of a and b"""
-    PositiveInteger.check(a)
-    PositiveInteger.check(b)
     if a > b:
         return gcd(b, a)
     while b != 0:
@@ -54,9 +70,8 @@ def gcd(a: int, b: int):
     return a
 
 
-def format(brand: str, price: float):
-    NonemptyString.check(brand)
-    PositiveFloat.check(price)
+@checked
+def format(brand: NonemptyString, price: PositiveFloat):
     return f"{brand}: ${price:.2f}"
 
 
