@@ -98,10 +98,16 @@ class Entity:
 
 
 @dataclass
+class Game(Entity):
+    name: NonemptyString
+
+
+@dataclass
 class Player(Entity):
     name: NonemptyString
     x: Integer
     y: Integer
+    game: Game
 
     def left(self, dx: PositiveInteger):
         self.x -= dx
@@ -116,4 +122,5 @@ class Player(Entity):
         self.y += dy
 
 
-p = Player("Mario", 3, 4)
+game = Game("Super Mario Bros")
+p = Player("Mario", 3, 4, game)
