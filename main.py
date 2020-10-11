@@ -75,7 +75,27 @@ def format(brand: NonemptyString, price: PositiveFloat):
     return f"{brand}: ${price:.2f}"
 
 
-# print("gcd(27, 36) =", gcd(27, 36))
-# print("gcd(2.7, 3.6) =", gcd(2.7, 3.6))
-# print("gcd('27', '36') =", gcd('27', '36'))
-# print("format('Apple', 123.4) =", )
+class Player:
+    def __init__(self, name: str, x: int, y: int):
+        self.name = name
+        self.x = x
+        self.y = y
+
+    def left(self, dx):
+        self.x -= dx
+
+    def right(self, dx):
+        self.x += dx
+
+    def down(self, dy):
+        self.y -= dy
+
+    def up(self, dy):
+        self.y += dy
+
+    def __repr__(self):
+        return f"Player(name={self.name}, x={self.x}, y={self.y})"
+
+
+p = Player("Mario", 3, 4)
+p.x = "bad"
