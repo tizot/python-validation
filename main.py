@@ -3,6 +3,15 @@ from inspect import signature
 
 
 class Contract:
+    # called on "owner" creation
+    def __set_name__(self, owner, name):
+        self.name = name
+
+    # this makes Contract a (data) descriptor
+    def __set__(self, instance, val):
+        self.check(val)
+        instance.__dict__[self.name] = val
+
     @classmethod
     def check(cls, val): ...
 
@@ -76,19 +85,14 @@ def format(brand: NonemptyString, price: PositiveFloat):
 
 
 class Player:
+    name = NonemptyString()
+    x = Integer()
+    y = Integer()
+
     def __init__(self, name: str, x: int, y: int):
         self.name = name
         self.x = x
         self.y = y
-
-    @property
-    def x(self):
-        return self._x
-
-    @x.setter
-    def x(self, val):
-        Integer.check(val)
-        self._x = val
 
     def left(self, dx):
         self.x -= dx
@@ -107,4 +111,3 @@ class Player:
 
 
 p = Player("Mario", 3, 4)
-p.x = "bad"
