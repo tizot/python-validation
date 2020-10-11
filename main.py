@@ -1,9 +1,39 @@
+class Integer:
+    @classmethod
+    def check(cls, val):
+        assert isinstance(val, int), "Expected int"
+
+
+class Float:
+    @classmethod
+    def check(cls, val):
+        assert isinstance(val, float), "Expected float"
+
+
+class String:
+    @classmethod
+    def check(cls, val):
+        assert isinstance(val, str), "Expected str"
+
+
+class Positive:
+    @classmethod
+    def check(cls, val):
+        assert val > 0, "Expected > 0"
+
+
+class Nonempty:
+    @classmethod
+    def check(cls, val):
+        assert len(val) > 0, "Expected non empty"
+
+
 def gcd(a: int, b: int):
     """Computes the greatest common divisor of a and b"""
-    assert isinstance(a, int), "Expected int"
-    assert a > 0, "Expected > 0"
-    assert isinstance(b, int), "Expected int"
-    assert b > 0, "Expected > 0"
+    Integer.check(a)
+    Positive.check(a)
+    Integer.check(b)
+    Positive.check(b)
     if a > b:
         return gcd(b, a)
     while b != 0:
@@ -12,10 +42,10 @@ def gcd(a: int, b: int):
 
 
 def format(brand: str, price: float):
-    assert isinstance(brand, str), "Expected str"
-    assert len(brand) > 0, "Expected non empty"
-    assert isinstance(price, float), "Expected float"
-    assert price > 0, "Expected > 0"
+    String.check(brand)
+    Nonempty.check(brand)
+    Float.check(price)
+    Positive.check(price)
     return f"{brand}: ${price:.2f}"
 
 
