@@ -81,6 +81,15 @@ class Player:
         self.x = x
         self.y = y
 
+    @property
+    def x(self):
+        return self._x
+
+    @x.setter
+    def x(self, val):
+        Integer.check(val)
+        self._x = val
+
     def left(self, dx):
         self.x -= dx
 
