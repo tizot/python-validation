@@ -1,9 +1,9 @@
-class Constraint:
+class Contract:
     @classmethod
     def check(cls, val): ...
 
 
-class Typed(Constraint):
+class Typed(Contract):
     type = None
 
     @classmethod
@@ -24,14 +24,14 @@ class String(Typed):
     type = str
 
 
-class Positive(Constraint):
+class Positive(Contract):
     @classmethod
     def check(cls, val):
         assert val > 0, "Expected > 0"
         super().check(val)
 
 
-class Nonempty(Constraint):
+class Nonempty(Contract):
     @classmethod
     def check(cls, val):
         assert len(val) > 0, "Expected non empty"
